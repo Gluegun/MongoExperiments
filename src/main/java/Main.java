@@ -3,6 +3,7 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvException;
 import com.opencsv.exceptions.CsvValidationException;
 import org.bson.BsonDocument;
 import org.bson.Document;
@@ -16,7 +17,7 @@ public class Main {
 
     private static Document document;
 
-    public static void main(String[] args) throws IOException, CsvValidationException {
+    public static void main(String[] args) throws IOException, CsvException {
 
         String csvFilePath = "src/main/resources/mongo.csv";
 
@@ -24,13 +25,10 @@ public class Main {
 
         List<Student> students = new ArrayList<>();
 
-        while (reader.readNext() != null) { // парсим CSV файл и добавляем полученные объекты в лист
+        List<String[]> testList = reader.readAll();
 
-            String[] strings = reader.readNext();
-
-            students.add(new Student(
-                    strings[0], Integer.parseInt(strings[1]), strings[2].split(",")
-            ));
+        for (String[] strings : testList) {
+            students.add(new Student(strings[0], Integer.parseInt(strings[1]), strings[2].split(",")));
         }
 
         MongoClient mongoClient = new MongoClient();
@@ -87,8 +85,8 @@ public class Main {
         System.out.println("Самый молодой студент: " + youngestStudent);
 
         /*
-        * Выводим имя и курсы самого возрастного студента
-        */
+         * Выводим имя и курсы самого возрастного студента
+         */
 
         FindIterable<Document> eldestStudentQuery = mongoStudents.find().sort(BsonDocument.parse("{age: -1}")).limit(1);
 
@@ -100,10 +98,10 @@ public class Main {
 
         System.out.println("Cписок курсов самого возрастного студента: " + eldestStudentCourses);
 
-
         /*
          * Выводим имена самых молодых студентов
          */
+
         FindIterable<Document> youngestStudentsQuery = mongoStudents.find(BsonDocument.parse("{age: 18}"));
 
 
