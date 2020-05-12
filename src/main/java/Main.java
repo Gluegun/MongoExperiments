@@ -67,7 +67,7 @@ public class Main {
 
         for (Document doc : studentsElderThan40years) {
 
-            System.out.println(doc.get("name") + " " + doc.get("age") + " лет " + doc.get("courses"));
+            System.out.println(doc.get("name") + " " + doc.get("age") + " л./г. " + doc.get("courses"));
 
         }
 
@@ -79,7 +79,7 @@ public class Main {
         String youngestStudent = "";
 
         for (Document doc : youngestStudentQuery) {
-            youngestStudent = doc.get("name").toString();
+            youngestStudent = doc.get("name").toString() + " " + doc.get("age").toString() + " л./г.";
         }
 
         System.out.println("Самый молодой студент: " + youngestStudent);
